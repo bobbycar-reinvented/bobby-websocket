@@ -1,0 +1,27 @@
+{
+  "name": "bobby-websocket",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bobbycar-graz/bobby-websocket.git"
+  },
+  "author": "",
+  "license": "gpl-3.0",
+  "bugs": {
+    "url": "https://github.com/bobbycar-graz/bobby-websocket/issues"
+  },
+  "homepage": "https://github.com/bobbycar-graz/bobby-websocket#readme",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.1",
+    "node-ipc": "^11.1.0",
+    "node-rpc": "^0.0.2",
+    "uuid": "^9.0.0"
+  }
+}

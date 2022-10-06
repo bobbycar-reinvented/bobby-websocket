@@ -1,9 +1,18 @@
-const WebSocketServer = require('ws').WebSocketServer;
-const httpServer = require('http').createServer();
-const uuid = require('uuid').v4;
-const env = require('dotenv').config().parsed;
-const express = require('express');
+import { WebSocketServer } from 'ws';
+import { createServer } from 'http';
+const httpServer = createServer();
+import * as _uuid from 'uuid';
+const uuid = _uuid.v4;
+import { config } from 'dotenv';
+const env = config().parsed;
+import express from 'express';
 const app = express();
+
+import ipc from 'node-ipc'
+
+ipc.config.id = 'bobby_websocket';
+ipc.config.retry = 1500;
+ipc.config.silent = true;
 
 let connectedBobbycars = [];
 let connectedWebClients = [];
@@ -425,6 +434,20 @@ httpServer.on('upgrade', (req, socket, head) => {
         websocket.emit('connection', ws, req);
     });
 })
+
+ipc.connectTo('bobby_insert_v2', () => {
+    ipc.of.bobby_insert_v2.on('udp_data', (data) => {
+        try {
+            const parsed = JSON.parse(data);
+            const { username, message } = parsed;
+
+            const clients = connectedWebClients.filter((client) => { return client.name === username });
+            for (const client of clients) {
+                client.send(JSON.stringify({ type: 'udpmessage', data: message }));
+            }
+        } catch {}
+    });
+});
 
 httpServer.listen(42429, '127.0.0.1');
 app.listen(42431, '127.0.0.1');
